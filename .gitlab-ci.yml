@@ -1,0 +1,67 @@
+stages:
+    - commit
+    - acceptance
+    - production
+    - release
+
+build:
+    image: node:latest
+    stage: commit
+    script:
+        - npm --prefix frontend install
+        - npm --prefix frontend test -- --watchAll=false
+        - npm --prefix frontend run build
+    coverage: /All\sfiles.*?\s+(\d+.\d+)/
+    artifacts:
+       paths:
+        - frontend/build
+      # reports:
+      #   junit: junit.xml
+
+    only:
+       - master
+
+pages:
+    stage: acceptance
+    script:
+        - mv frontend/build public
+    environment:
+       name: acceptance
+       url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME
+    variables:
+      GIT_STRATEGY: none
+    artifacts:
+       paths:
+        - public
+    only:
+       - master
+
+release-job:
+    image: node:latest
+    stage: release
+    variables:
+      GITLAB_TOKEN: $GITLAB_TOKEN
+    script:
+      - npm install semantic-release @semantic-release/gitlab @semantic-release/changelog
+      - npx semantic-release
+    only:
+      - master
+
+deploy-job:
+    image: python:3.9.2-alpine3.13
+    stage: production
+    variables:
+      ANSIBLE_REMOTE_USER: ec2-user
+      ANSIBLE_PRIVATE_KEY_FILE: ambiente/devops-key
+      ANSIBLE_HOST_KEY_CHECKING: 'False'
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    before_script:
+      - cp -r public ambiente/
+      - apk add --no-cache openssh py3-boto3 ansible
+      - ansible-galaxy collection install -r ambiente/config/requirements.yml
+    script:
+      - ansible-playbook ambiente/provisioning.yml
+      - ansible-playbook ambiente/install.yml --inventory ambiente/config/inventory.aws_ec2.yml
+    only:
+      - master

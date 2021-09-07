@@ -1,0 +1,10 @@
+{
+  "roots": [
+    "src"
+  ],
+  "collectCoverageFrom": [
+    "**/*.js",
+    "!**/node_modules/**",
+    "!**/coverage/**"
+  ]
+}

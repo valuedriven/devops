@@ -1,0 +1,18 @@
+{
+  "name": "devops",
+  "version": "1.0.0",
+  "description": "Projeto de referência com exemplos de práticas DevOps",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "eslint": "eslint -f json  --output-file=eslint-report.json . ",
+    "sonar": "sonar-scanner"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "jest": "^26.6.0",
+    "sonarqube-scanner": "^2.7.0"
+  }
+}
