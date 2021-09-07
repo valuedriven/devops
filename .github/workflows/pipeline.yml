@@ -49,6 +49,9 @@ jobs:
       with:
         name: deploy
         path: ambiente/public
+    - run: pip install --user boto3 botocore
     - run: ansible-galaxy collection install -r ambiente/config/requirements.yml
-    - run: ansible-playbook ambiente/provisioning.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+    - run: pip freeze
+    - run: which python3  
+    - run: ansible-playbook -vvv ambiente/provisioning.yml -e 'ansible_python_interpreter=/usr/bin/python3'
     - run: ansible-playbook ambiente/install.yml --inventory ambiente/config/inventory.aws_ec2.yml -e 'ansible_python_interpreter=/usr/bin/python3'
