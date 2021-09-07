@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "eslint": "eslint -f json  --output-file=eslint-report.json . ",
+    "eslint": "eslint . ",
     "sonar": "sonar-scanner"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.11.0",
+    "eslint": "^7.32.0",
     "jest": "^26.6.0",
-    "sonarqube-scanner": "^2.7.0"
+    "sonarqube-scanner": "^2.8.1"
   }
 }
