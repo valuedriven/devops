@@ -12,12 +12,12 @@
     AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
   
   tasks:
-    # - name: Instalação de módulos pip
-    #   pip:
-    #     name: "{{ item }}"
-    #     extra_args: --user
-    #   loop: ['botocore',
-    #          'boto3']
+    - name: Instalação de módulos pip
+      pip:
+        name: "{{ item }}"
+        extra_args: --user
+      loop: ['botocore',
+             'boto3']
 
     - name: Verificação da existência de chave no EC2
       amazon.aws.ec2_key:

@@ -51,8 +51,8 @@ jobs:
         name: deploy
         path: ambiente/public
     # - run: pip install --user boto3 botocore
-    - run: pipx inject ansible-base boto3 botocore
+    # - run: pipx inject ansible-base boto3 botocore
     - run: pip freeze
     - run: ansible-galaxy collection install -r ambiente/config/requirements.yml
-    - run: ansible-playbook -vvvv ambiente/provisioning.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+    - run: ansible-playbook -vvvv ambiente/provisioning.yml -e 'ansible_python_interpreter=/usr/bin/python3' -e 'ansible_connection=local'
     - run: ansible-playbook ambiente/install.yml --inventory ambiente/config/inventory.aws_ec2.yml -e 'ansible_python_interpreter=/usr/bin/python3'
